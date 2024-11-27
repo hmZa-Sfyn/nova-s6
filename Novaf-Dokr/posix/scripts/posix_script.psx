@@ -1,0 +1,16 @@
+# JSON parsing and stringifying
+var json_data "{\"name\":\"John\",\"age\":30}"
+var parsed_data json parse json_data
+print parsed_data.name
+
+# HTTP request
+var response http GET "https://api.example.com/data"
+print response
+
+# DateTime formatting
+var current_time datetime now
+print datetime format current_time "yyyy-MM-dd HH:mm:ss"
+
+# Regex operations
+var text "Hello, my email is example@email.com"
+var email_match regex find "\\b[A-Za-z0-9._%+-]+@[A-Za-z0
