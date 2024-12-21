@@ -13,12 +13,468 @@
     flexibility and control to modern network operations.
 </p>
 
-<img src="./ing1.png"></img>
 
-<img src="./new.png"></img>
 
+## Version 4.2.yz.24
+
+**Added anathor shell** ```(hqsh)```
+
+### Commands
+
+# Command Documentation
+
+## Basic Commands
+
+### echo
+Prints text to console without a new line.
+```
+echo Hello World
+// Output: Hello World 
+```
+
+### echoln
+Prints text to console with each argument on a new line.
+```
+echoln Hello World
+// Output:
+// Hello
+// World
+```
+
+## Mind Storage Commands
+
+### mind
+Manages a list-based storage system.
+
+#### Available Options:
+- `-add`: Add items to storage
+- `-get`: Retrieve item by index
+- `-list`: Display all stored items
+
+```
+mind -add item1 item2 item3    // Adds items to storage
+mind -get 1                    // Gets item at index 1
+mind -list                     // Shows all stored items
+```
+
+## Register Commands
+
+### reg
+Manages key-value based storage.
+
+#### Syntax:
+```
+reg>>set>>key>>value    // Sets a key-value pair
+reg>>get>>key          // Gets value for a key
+reg>>list             // Lists all registered key-value pairs
+```
+
+## Environment Variable Commands
+
+### $$env
+Manages environment variables.
+
+#### Basic Usage:
+```
+$$env::variableName           // Gets value of specific variable
+$$env>>variableName>>value   // Sets environment variable
+$$env>>$all                  // Lists all environment variables
+$$env>>$rem>>variableName   // Removes environment variable
+```
+
+# Complete Network Commands Documentation
+
+## TCP Operations
+
+### tcp-connect
+Establishes TCP connection to a host and port
+```
+net tcp-connect hostname port [message]
+net tcp-connect localhost 8080 "Hello Server"
+```
+
+### tcp-server
+Creates a TCP server on specified port
+```
+net tcp-server port
+net tcp-server 8080
+```
+
+## FTP Operations
+
+### ftp-upload
+Uploads a file to FTP server
+```
+net ftp-upload server username password localfile
+net ftp-upload ftp.example.com user pass /path/to/file.txt
+```
+
+### ftp-download
+Downloads a file from FTP server
+```
+net ftp-download server username password remotefile localfile
+net ftp-download ftp.example.com user pass remote.txt local.txt
+```
+
+### ftp-list
+Lists files on FTP server
+```
+net ftp-list server username password
+net ftp-list ftp.example.com user pass
+```
+
+## Email Protocol Operations
+
+### smtp-send
+Sends email using SMTP
+```
+net smtp-send server port username password to subject body
+net smtp-send smtp.gmail.com 587 user@gmail.com pass to@example.com "Test" "Message"
+```
+
+### imap-check
+Checks IMAP mailbox status
+```
+net imap-check server port username password
+net imap-check imap.gmail.com 993 user@gmail.com pass
+```
+
+## Security Protocols
+
+### ssl-check
+Validates SSL certificate of a host
+```
+net ssl-check hostname
+net ssl-check example.com
+```
+
+### rdp-check
+Checks if RDP port is accessible
+```
+net rdp-check hostname
+net rdp-check remote-server.com
+```
+
+## Basic Network Commands
+
+### ping
+Tests connectivity to a host
+```
+net ping hostname
+net ping google.com
+```
+
+### gethost
+Gets host information
+```
+net gethost hostname
+net gethost google.com
+```
+
+### getip
+Resolves domain name to IP addresses
+```
+net getip hostname
+net getip google.com
+```
+
+## Network Analysis
+
+### scan-ports
+Scans port range on host
+```
+net scan-ports hostname startPort endPort
+net scan-ports 192.168.1.1 80 443
+```
+
+### traceroute
+Traces route to destination
+```
+net traceroute hostname
+net traceroute google.com
+```
+
+### whois
+Performs WHOIS lookup
+```
+net whois domain
+net whois google.com
+```
+
+## Network Monitoring
+
+### listen
+Creates network listener
+```
+net listen port
+net listen 8080
+```
+
+### netstat
+Shows active connections
+```
+net netstat
+```
+
+### check-connection
+Verifies network connectivity
+```
+net check-connection
+```
+
+## Performance Testing
+
+### bandwidth-test
+Tests download speed
+```
+net bandwidth-test
+```
+
+## Web Operations
+
+### download
+Downloads file from URL
+```
+net download url localfile
+net download https://example.com/file.txt local.txt
+```
+
+### http-get
+Performs HTTP GET request
+```
+net http-get url
+net http-get https://api.example.com
+```
+
+## Interface Information
+
+### mac
+Shows MAC addresses
+```
+net mac
+```
+
+### route
+Displays routing information
+```
+net route
+```
+
+## UDP Operations
+
+### send-packet
+Sends UDP packet
+```
+net send-packet host port message
+net send-packet 192.168.1.1 8080 "Hello"
+```
+
+## Best Practices
+
+1. **Security Considerations**
+   - Always use secure protocols when available (FTPS over FTP, HTTPS over HTTP)
+   - Be cautious with credentials in command parameters
+   - Use SSL/TLS for email protocols
+
+2. **Performance**
+   - Avoid running bandwidth tests frequently
+   - Be mindful of port scanning ranges
+   - Consider timeout values for network operations
+
+3. **Error Handling**
+   - All commands include error handling
+   - Check return messages for operation status
+   - Verify network connectivity before operations
+
+4. **Usage Notes**
+   - Commands are case-insensitive
+   - Most commands require appropriate permissions
+   - Some operations may be blocked by firewalls
+   - For file operations, verify paths before execution
+
+# Complete Network Commands Documentation
+
+## TCP Operations
+
+### tcp-connect
+Establishes TCP connection to a host and port
+```
+net tcp-connect hostname port [message]
+net tcp-connect localhost 8080 "Hello Server"
+```
+
+### tcp-server
+Creates a TCP server on specified port
+```
+net tcp-server port
+net tcp-server 8080
+```
+
+## FTP Operations
+
+### ftp-upload
+Uploads a file to FTP server
+```
+net ftp-upload server username password localfile
+net ftp-upload ftp.example.com user pass /path/to/file.txt
+```
+
+### ftp-download
+Downloads a file from FTP server
+```
+net ftp-download server username password remotefile localfile
+net ftp-download ftp.example.com user pass remote.txt local.txt
+```
+
+### ftp-list
+Lists files on FTP server
+```
+net ftp-list server username password
+net ftp-list ftp.example.com user pass
+```
+
+## Email Protocol Operations
+
+### smtp-send
+Sends email using SMTP
+```
+net smtp-send server port username password to subject body
+net smtp-send smtp.gmail.com 587 user@gmail.com pass to@example.com "Test" "Message"
+```
+
+### imap-check
+Checks IMAP mailbox status
+```
+net imap-check server port username password
+net imap-check imap.gmail.com 993 user@gmail.com pass
+```
+
+## Security Protocols
+
+### ssl-check
+Validates SSL certificate of a host
+```
+net ssl-check hostname
+net ssl-check example.com
+```
+
+### rdp-check
+Checks if RDP port is accessible
+```
+net rdp-check hostname
+net rdp-check remote-server.com
+```
+
+## Basic Network Commands
+
+### ping
+Tests connectivity to a host
+```
+net ping hostname
+net ping google.com
+```
+
+### gethost
+Gets host information
+```
+net gethost hostname
+net gethost google.com
+```
+
+### getip
+Resolves domain name to IP addresses
+```
+net getip hostname
+net getip google.com
+```
+
+## All Commands
+
+```bash
+net tcp-connect hostname port [message]      // Establishes TCP connection to a host and port
+net tcp-server port                          // Creates a TCP server on the specified port
+net smtp-send server port username password to subject body // Sends email using SMTP
+net rdp-check hostname                       // Checks if RDP port is accessible
+net ping hostname                            // Tests connectivity to a host
+net gethost hostname                         // Gets host information
+net getip hostname                           // Resolves domain name to IP address
+net scan-ports hostname startPort endPort    // Scans port range on a host
+net traceroute hostname                      // Traces route to a destination
+net whois domain                             // Performs WHOIS lookup
+net listen port                              // Creates a network listener
+net netstat                                  // Shows active connections
+net check-connection                         // Verifies network connectivity
+net bandwidth-test                           // Tests download speed
+net download url localfile                   // Downloads file from a URL
+net http-get url                             // Performs HTTP GET request
+net mac                                      // Displays MAC addresses
+net route                                    // Shows routing information
+net send-packet host port message            // Sends a UDP packet
+
+```
+
+## File Management Commands
+
+### file
+Comprehensive file management system.
+
+#### Available Commands:
+```
+file create filename content    // Creates new file with content
+file read filename             // Displays file content
+file delete filename           // Deletes specified file
+file append filename content   // Appends content to file
+file rename oldname newname    // Renames file
+file copy source destination   // Copies file
+file info filename            // Shows file information
+file exists filename          // Checks if file exists
+file lines-count filename     // Counts lines in file
+file search filename text     // Searches for text in file
+file encrypt filename         // Encrypts file
+file decrypt filename         // Decrypts file
+file compress filename        // Compresses file
+file decompress filename      // Decompresses file
+file hash filename           // Generates SHA-256 hash
+file watch filename          // Monitors file for changes
+file temp [content]          // Creates temporary file
+```
+
+## Directory Management Commands
+
+### dir
+Directory manipulation commands.
+
+#### Available Commands:
+```
+dir create dirname            // Creates new directory
+dir list dirname             // Lists directory contents
+dir delete dirname           // Deletes directory
+dir rename oldname newname   // Renames directory
+dir exists dirname           // Checks if directory exists
+dir info dirname            // Shows directory information
+dir size dirname            // Calculates directory size
+dir count-files dirname     // Counts files in directory
+dir count-dirs dirname      // Counts subdirectories
+dir backup dirname          // Creates directory backup
+dir clean dirname           // Removes all contents
+dir find dirname pattern    // Finds files matching pattern
+dir monitor dirname         // Monitors directory changes
+```
+
+## Help Command
+
+### help
+Displays available commands and their basic usage.
+```
+help
+// Displays list of all commands and basic instructions
+```
+
+Note: All commands are case-insensitive for better usability.
 
 ## Version 2.0.0 (5/11/2024) Uploaded On (5~6/11/2024)
+
+<img src="./new.png"></img>
 
 **Added some other scripting languages and other usefull tools, which makes it a complete standalone thing(terminal interface) :**
 - Added anathor shell interface `hqsh`.
@@ -112,6 +568,7 @@
 <br>
 
 <img src="./ing2.png"></img>
+<img src="./ing1.png"></img>
 
 **Added some network and user commands:**
 
