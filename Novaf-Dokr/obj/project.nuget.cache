@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "dgSpecHash": "VdE83gyKOxw=",
+  "success": true,
+  "projectFilePath": "G:\\s-cat\\fri3nds\\v-category-projects\\Developer-Grade-Virtual-OS\\Nova-S6\\Novaf-Dokr\\Novaf-Dokr.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Hamza\\.nuget\\packages\\bouncycastle.cryptography\\2.5.0\\bouncycastle.cryptography.2.5.0.nupkg.sha512",
+    "C:\\Users\\Hamza\\.nuget\\packages\\mimekit\\4.9.0\\mimekit.4.9.0.nupkg.sha512",
+    "C:\\Users\\Hamza\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\Hamza\\.nuget\\packages\\restsharp\\112.1.0\\restsharp.112.1.0.nupkg.sha512",
+    "C:\\Users\\Hamza\\.nuget\\packages\\system.formats.asn1\\8.0.1\\system.formats.asn1.8.0.1.nupkg.sha512",
+    "C:\\Users\\Hamza\\.nuget\\packages\\system.net.ftpclient\\1.0.5824.34026\\system.net.ftpclient.1.0.5824.34026.nupkg.sha512",
+    "C:\\Users\\Hamza\\.nuget\\packages\\system.security.cryptography.pkcs\\8.0.1\\system.security.cryptography.pkcs.8.0.1.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'System.Net.FtpClient 1.0.5824.34026' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0'. This package may not be fully compatible with your project.",
+      "libraryId": "System.Net.FtpClient",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
+}
