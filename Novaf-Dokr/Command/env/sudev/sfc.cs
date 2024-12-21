@@ -1,6 +1,5 @@
-﻿using nova.Command;
-using nova.Command.env;
-using nova.Utils;
+﻿using nova_s6.Command;
+using nova_s6.Utils;
 using Novaf_Dokr.Customization.lang.xMake;
 using System;
 using System.Collections.Generic;
@@ -8,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using static nova.Command.env.shel_scripting_lang.ByteCode.ByteCodeVM.Process.ByteCode;
 using static nova_vm.Command.env.sudev.SudevConsole.Configurations;
 
 namespace nova_vm.Command.env.sudev
@@ -286,10 +284,6 @@ namespace nova_vm.Command.env.sudev
                         {
                             RunSomeStuff.Scripts.Run(thing.Replace("sys:", "").Replace("s:", ""));
                         }
-                        else if (thing.StartsWith("nova:") || thing.StartsWith("c:"))
-                        {
-                            RunSomeStuff.novaScripts.Run(thing.Replace("nova:", "").Replace("c:", ""));
-                        }
                         else if (thing.StartsWith("dokr:") || thing.StartsWith("d:"))
                         {
                             try
@@ -367,28 +361,6 @@ namespace nova_vm.Command.env.sudev
                             PleaseCommandEnv.TheseCommands(parsed_commands);
 
                             IdentifyCommand.CacheClean();
-                        }
-                    }
-                }
-                public class novaScripts
-                {
-                    public static void Run(string path_to_script)
-                    {
-                        if (!File.Exists(path_to_script))
-                        {
-                            errs.CacheClean();
-                            errs.New($"Error: `{path_to_script}` file not present.");
-                            errs.ListThem();
-                            errs.CacheClean();
-                        }
-                        else
-                        {
-                            int x = 0;
-                            foreach (var line in (nova_lang.Compiler.Bytecode.Generate.From.RichText(File.ReadAllText(path_to_script))))
-                            {
-                                Console.WriteLine($"{x}: {line}");
-                                x++;
-                            }
                         }
                     }
                 }

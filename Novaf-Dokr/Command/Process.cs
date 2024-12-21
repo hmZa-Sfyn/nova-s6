@@ -3,8 +3,8 @@ using System.Text;
 using System.Text.Json;
 using System.IO;
 
-using nova.Utils;
-using nova.Command;
+using nova_s6.Utils;
+using nova_s6.Command;
 
 using System.Diagnostics;
 using System.ComponentModel.Design;
@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 using Novaf_Dokr.Command.env.user;
 using Novaf_Dokr.Customization;
 
-namespace nova.Command
+namespace nova_s6.Command
 {
 
     internal class CommandEnv
@@ -412,6 +412,9 @@ namespace nova.Command
 
             foreach (var command in commands)
             {
+                if (command == "" || string.IsNullOrEmpty(command))
+                    return;
+
                 CommandHistory.Add(command);
                 var parts = command.Split(' ');
 
@@ -925,7 +928,7 @@ namespace nova.Command
                         EnvironmentVariables[parts[2]] = string.Join(" ", parts.Skip(3));
                         SaveEnvironmentVariables();
                         //Console.WriteLine($"Environment variable '{parts[2]}' set.");
-                        novaOutput.result($"Environment variable '{parts[2]}' set.");
+                        novaOutput.result($"Environment variable '{parts[2]}' set to `{string.Join(" ", parts.Skip(3))}`.");
                     }
                     break;
                 case "get":

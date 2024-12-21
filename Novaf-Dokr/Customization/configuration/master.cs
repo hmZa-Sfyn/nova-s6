@@ -1,5 +1,5 @@
-﻿using nova.Command;
-using nova.Utils;
+﻿using nova_s6.Command;
+using nova_s6.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;

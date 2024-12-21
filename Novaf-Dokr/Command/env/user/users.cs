@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
-using nova.Command;
-using nova.Utils;
+using nova_s6.Command;
+using nova_s6.Utils;
 
 namespace Novaf_Dokr.Command.env.user
 {

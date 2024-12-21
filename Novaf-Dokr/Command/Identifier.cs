@@ -5,9 +5,9 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
-using nova.Utils;
+using nova_s6.Utils;
 
-namespace nova.Command
+namespace nova_s6.Command
 {
     internal class Identifier
     {

@@ -1,5 +1,5 @@
-﻿using nova.Command;
-using nova.Utils;
+﻿using nova_s6.Command;
+using nova_s6.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,14 +18,17 @@ namespace nova_vm.Command.env.doker_lang
             {
                 public static void ThisCode(string Code)
                 {
-                    //List<string> list = new List<string>();
-                    //list = Code.Split(";").ToList();
+                    List<string> list = new List<string>();
+                    list = Code.Split(";").ToList();
 
-                    //foreach (string line in list)
-                    //{
-                    //    Console.Write($"\nEXECUTING: {line}");
-                    //    Interpreter.Interpret.main.ThisCodeLineOnly(line);
-                    //}
+                    foreach (string line in list)
+                    {
+                        //Console.Write($"\nEXECUTING: {line}");
+                        Interpreter.Interpret.main.ThisCodeLineOnly(line);
+                    }
+                }
+                public static void Interactive()
+                {
                 AssemblyLoadEventArgs:
                     Console.Write("\n> ");
 

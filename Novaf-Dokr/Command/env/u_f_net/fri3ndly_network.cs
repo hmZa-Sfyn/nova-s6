@@ -9,13 +9,13 @@ using System.Net.Sockets;
 using System.Net;
 using System.Diagnostics;
 using Novaf_Dokr.Command.env.user;
-using nova.Command;
+using nova_s6.Command;
 using System.Xml.Linq;
 
 using RestSharp;
 using System;
 using RestSharp.Authenticators;
-using nova.Utils;
+using nova_s6.Utils;
 using Novaf_Dokr.Command.env.u_f_net.utils;
 using System.Globalization;
 using System.Threading.Tasks.Dataflow;
@@ -233,7 +233,7 @@ namespace Novaf_Dokr.Command.env.u_f_net
                 Console.WriteLine("  list                         - List all running nodes in your network");
                 Console.WriteLine("  add <nodename> <path> <port> - Add a new node in your system");
                 Console.WriteLine("  remove <nodename>            - Remove a node from your system");
-                Console.WriteLine("  login <nodename> <username> <password>     - Login to a node in your system or network");
+                Console.WriteLine("  login <nodename> <username> <password> - Login to a node in your system or network");
                 Console.WriteLine("  logout                       - Logout from the current node and login to 127.0.0.1");
                 Console.WriteLine("  node <subcommand>            - Manage node operations (go-live, shutdown, update, stats)");
                 Console.WriteLine("  req  <subcommand>            - Manage requests operations, type `list` for list, type `help` for `help`");

@@ -1,10 +1,10 @@
-﻿using nova.Utils;
+﻿using nova_s6.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
-namespace nova.Command
+namespace nova_s6.Command
 {
     internal class RunOnWindows
     {
