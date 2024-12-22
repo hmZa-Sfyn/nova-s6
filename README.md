@@ -1,7 +1,7 @@
 <br>
 <br>
 
-<h1 style="text-align:center;">nova6</h1>
+<h1 style="text-align:center;" align="center">Nova-S6</h1>
 <h3 style="text-align:center;">Is A New Type Of Network Interface</h3>
 
 <p style="text-align:center;">
