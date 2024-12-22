@@ -1,7 +1,13 @@
 <br>
 <br>
 
-<h1 style="text-align:center;" align="center">Nova-S6</h1>
+<h1 style="text-align:center;font-size:40px;font-family:monospace;" align="center">Nova-S6</h1>
+
+```bash
+Please go-to the main repo at 'https://github.com/Order-of-the-Nova-Keepers/nova-s6' for further updates!
+This repo is not being mentained!
+Last update '21/12/2024' @hmZa-Sfyn
+```
 <h3 style="text-align:center;">Is A New Type Of Network Interface</h3>
 
 <p style="text-align:center;">
