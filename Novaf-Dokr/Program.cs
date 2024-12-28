@@ -10,10 +10,8 @@ using nova_s6.Utils;
 using nova_s6.Command;
 using System.Runtime.ExceptionServices;
 using System.Reflection.Metadata.Ecma335;
-using Novaf_Dokr.Customization.configuration;
-using Novaf_Dokr.Customization;
 using System.Diagnostics.SymbolStore;
-using Novaf_Dokr.Customization.lang.xMake;
+
 using Novaf_Dokr.Command.env.u_f_net;
 using System.Xml.Linq;
 //using nova_s6.Tests;
@@ -23,8 +21,8 @@ namespace novaf
 {
     public class Program
     {
-        public static string __version__ = "4.2.yz.24";
-        public static string __shell__ = "hqsh";
+        public static string __version__ = "4.3.za.24";
+        public static string __shell__ = "holy-c";
         static void Main(string[] args)
         {
             //Console.WriteLine("(c) nova Initial Developers | Fri3nds .G");
@@ -40,6 +38,9 @@ namespace novaf
             public string Desc { get; set; }
             public string Version { get; set; }
         } 
+
+        public static List<Shell> Shells = new List<Shell>();
+
         public static void Initnova(bool isctrlc)
         {
             #region UnitTests
@@ -123,20 +124,20 @@ namespace novaf
             CommandEnv.LoadEnvironmentPointers();
             CommandEnv.LoadEnvironmentVariables();
 
-            master.conf.EnsureEnvironmentSetup();
+            nova_s6.shells.hqsh.emul.EnsureMacrosExist();
 
             //foreach (master.conf.ConfigurationData _cd in master._Conf_Files_List)
             //{
             //    Console.WriteLine(_cd.File.Path.ToString());
             //}
 
-            List<Shell> Shells = new List<Shell>();
+            
 
             Shells.Add(new Shell
             {
                 Num = 0,
                 Name = "hqsh",
-                Desc = "The default shell emulater, for `nova-s6` systems, not in previous distros.",
+                Desc = "The secondary/customized shell interface, for `nova-s6` systems, not in previous distros.",
                 Version = __version__
             });
 
@@ -144,11 +145,27 @@ namespace novaf
             {
                 Num = 1,
                 Name = "hsh",
-                Desc = "The secondary/customized shell for `Novaf-Dokr` and other newer distros.",
+                Desc = "The primary/customized shell for `Novaf-Dokr` and other newer distros.",
                 Version = "27/11/2024"
             });
 
-            Console.WriteLine($"\n(*) sh: type: `!sh help` for `sh-help`.");
+            Shells.Add(new Shell
+            {
+                Num = 2,
+                Name = "ush",
+                Desc = "The un-fun shell, just made for nova~interpreter, go on with others, dont touch this!",
+                Version = nova_s6.shells.ush.emul.UshShellVersion
+            });
+
+            Shells.Add(new Shell
+            {
+                Num = 3,
+                Name = "holy-c",
+                Desc = "The super-fun, super-awsome and holy shell based on holy-c language. (Terry Davis)",
+                Version = nova_s6.shells.holy_c.shell.HolyC_Version
+            });
+
+            Console.WriteLine($"\n(*) sh: type: `!help` for `sh shell help`.");
 
             try
             {
@@ -162,8 +179,8 @@ namespace novaf
                         {
                             e.Cancel = false; // Prevent the app from closing
                             Console.WriteLine("\n<CTRL-C>: type `@exit` to exit!");
-                            Console.ForegroundColor = XmInterpreter.__CurrentForegroundColor;
-                            Console.BackgroundColor = XmInterpreter.__CurrentBackgroundColor;
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.BackgroundColor = ConsoleColor.Black;
                             Initnova(true);
                         };
 
@@ -172,11 +189,23 @@ namespace novaf
                             // The rest of your code
                             if (__shell__.ToLower() == "hsh")
                             {
-                                DesignFormat.TakeInput([$"\n{CommandEnv.CURRENT_USER_NAME}", "@", "kernal", ":>>", $"{CommandEnv.CurrentDirDest} ", $"{DesignFormat.get_shell_icon(__shell__)}"]);
-}
+                                DesignFormat.TakeInput([$"\n{CommandEnv.CURRENT_USER_NAME}", "@", $"{Environment.MachineName}", ": ", $"{CommandEnv.CurrentDirDest} ", $"{DesignFormat.get_shell_icon(__shell__)} "]);
+                            }
                             else if (__shell__.ToLower() == "hqsh")
                             {
-                                DesignFormat.TakeInput([$"\n[{CommandEnv.CurrentDirDest}]", $"\n|---> [{DesignFormat.get_shell_icon(__shell__)}]-[{CommandEnv.CURRENT_USER_NAME}]", $"\n|---> "]);
+                                DesignFormat.TakeInput([$"\n[{CommandEnv.CurrentDirDest}]", $" [{CommandEnv.CURRENT_USER_NAME}]", $"\n{DesignFormat.get_shell_icon(__shell__)} "]);
+                            }
+                            else if (__shell__.ToLower() == "ush")
+                            {
+                                DesignFormat.TakeInput([$"\n({CommandEnv.CURRENT_USER_NAME})", $" "]);
+                            }
+                            else if (__shell__.ToLower() == "holy-c")
+                            {
+                                DesignFormat.TakeInput([$"\nT:\\Home\\", $">"]);
+                            }
+                            else
+                            {
+                                DesignFormat.TakeInput([$"\n{CommandEnv.CurrentDirDest}", $"\n{CommandEnv.CURRENT_USER_NAME}]", $"\n{DesignFormat.get_shell_icon(__shell__)}\n"]);
                             }
 
                             List<string> commands = UserInput.Prepare(UserInput.Input());
@@ -190,43 +219,10 @@ namespace novaf
 
                             if (parsed_commands[0].StartsWith("!"))
                             {
-                                if (parsed_commands[0] == "!csh")
+                                bool ExitStat = nova_s6.shells.sh.interpreter.Interpret(parsed_commands);
+                                if (!ExitStat)
                                 {
-                                    if (parsed_commands.Count < 1)
-                                        return;
-
-                                    if (parsed_commands[1].ToLower() == "--list")
-                                    {
-
-                                        foreach (var shell in Shells)
-                                        {
-                                            Console.WriteLine($"{shell.Num,-3}: {shell.Name,-6} :{DesignFormat.get_shell_icon(shell.Name),-2} {shell.Desc,-90} {shell.Version,-20} ");
-                                        }
-                                    }
-                                    else if (parsed_commands[1].ToLower() == "+d")
-                                    {
-                                        if (parsed_commands.Count < 2)
-                                            return;
-
-                                        __shell__ = parsed_commands[2];
-                                    }
-                                    else if (parsed_commands[1].ToLower() == "--help")
-                                    {
-                                        Console.WriteLine(" !csh --list    :: To list shells. " +
-                                                        "\n !csh --help    :: To show this help message." +
-                                                        "\n !csh +d $shell :: To deploy `$shell` and logout from the previoes one.");
-                                    }
-                                    else
-                                    {
-                                        errs.CacheClean();
-                                        errs.New($"sh: csh: type: `!csh --help` for help.");
-                                        errs.ListThemAll();
-                                        errs.CacheClean();
-                                    }
-                                }
-                                if (parsed_commands[0] == "!cls")
-                                {
-                                    Console.Clear();
+                                    novaOutput.starerror($"Process ended with exit status: {ExitStat}"); 
                                 }
                             }
                             else
@@ -240,17 +236,28 @@ namespace novaf
                                 {
                                     nova_s6.shells.hqsh.emul.ate(parsed_commands);
                                 }
+                                else if (__shell__.ToLower() == "ush")
+                                {
+                                    nova_s6.shells.ush.emul.ate(parsed_commands);
+                                }
+                                else if (__shell__.ToLower() == "holy-c")
+                                {
+                                    nova_s6.shells.holy_c.shell.ate(parsed_commands, "Nova-S->Repl");
+                                }
                                 else
                                 {
                                     errs.CacheClean();
-                                    errs.New($"`{__shell__}`: is not a well-known shell, by me. turning to default `hqsh` shell. Type: `!csh --list` for the list of builtin shells.");
+                                    errs.New($"`{__shell__}`: is not a well-known shell, by me. turning to default `hsh` shell. Type: `!csh --list` for the list of builtin shells.");
                                     errs.ListThemAll();
                                     errs.CacheClean();
 
-                                    __shell__ = "hqsh";
+                                    __shell__ = "hsh";
                                 }
 
                             }
+
+                            errs.ListThem();
+                            errs.CacheClean();
 
                             IdentifyCommand.CacheClean();
                         }
@@ -264,9 +271,10 @@ namespace novaf
                     }
                     catch (Exception exp) // Exception handling block
                     {
-                        errs.CacheClean();
-                        errs.New(exp.ToString());
-                        errs.ListThem();
+                        //errs.CacheClean();
+                        //errs.New(exp.ToString());
+                        //errs.ListThem();
+                        novaOutput.starerror("An error occured");
                     }
 
                     // Handle CTRL+C key press to prevent quitting
@@ -279,9 +287,7 @@ namespace novaf
             }
             catch (Exception exx)
             {
-                errs.New(exx.ToString());
-                errs.ListThem();
-                errs.CacheClean();
+                novaOutput.starerror("An error occured");
             }
         }
         #endregion

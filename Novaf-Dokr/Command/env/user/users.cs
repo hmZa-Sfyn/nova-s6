@@ -13,8 +13,11 @@ namespace Novaf_Dokr.Command.env.user
 {
     public class Users
     {
-        public const string USER_FILE_PATH = @"C:\Users\Hamza\vin_env\third_party\nova\users\uygfiyiTFVYTFyvfvrTYR8Y5r6rHFtyrf65RTfyTFVr.json";
-        public const string DELETED_USER_FILE_PATH = @"C:\Users\Hamza\vin_env\third_party\nova\users\yGU(T67t67RT76r86R86r8TRVytRCTrv65RV865rvT.json";
+        public static string UserHomeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+        public static string USER_FILE_PATH = Path.Combine(UserHomeDir, "vin_env\\third_party\\nova\\users\\uygfiyiTFVYTFyvfvrTYR8Y5r6rHFtyrf65RTfyTFVr.json");
+        public static string DELETED_USER_FILE_PATH = Path.Combine(UserHomeDir, "vin_env\\third_party\\nova\\users\\yGU(T67t67RT76r86R86r8TRVytRCTrv65RV865rvT.json");
+
         public const int MAX_ROOT_USERS = 150;
         public const int MAX_TMP_USERS = 5000;
 

@@ -342,11 +342,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\s-cat\\fri3nds\\v-category-projects\\Developer-Grade-Virtual-OS\\Nova-S6\\Novaf-Dokr\\Novaf-Dokr.csproj",
+      "projectUniqueName": "G:\\s-cat\\fri3nds\\v-category-projects\\Developer-Grade-Virtual-OS\\Novs-S6-repo\\nova-s6\\Novaf-Dokr\\Novaf-Dokr.csproj",
       "projectName": "Novaf-Dokr",
-      "projectPath": "G:\\s-cat\\fri3nds\\v-category-projects\\Developer-Grade-Virtual-OS\\Nova-S6\\Novaf-Dokr\\Novaf-Dokr.csproj",
+      "projectPath": "G:\\s-cat\\fri3nds\\v-category-projects\\Developer-Grade-Virtual-OS\\Novs-S6-repo\\nova-s6\\Novaf-Dokr\\Novaf-Dokr.csproj",
       "packagesPath": "C:\\Users\\Hamza\\.nuget\\packages\\",
-      "outputPath": "G:\\s-cat\\fri3nds\\v-category-projects\\Developer-Grade-Virtual-OS\\Nova-S6\\Novaf-Dokr\\obj\\",
+      "outputPath": "G:\\s-cat\\fri3nds\\v-category-projects\\Developer-Grade-Virtual-OS\\Novs-S6-repo\\nova-s6\\Novaf-Dokr\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

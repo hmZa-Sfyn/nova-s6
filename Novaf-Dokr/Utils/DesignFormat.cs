@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 namespace nova_s6.Utils
 {
     using novaf;
-    using Novaf_Dokr.Customization.lang.xMake;
     using System;
     using System.Collections.Generic;
 
@@ -65,12 +64,12 @@ namespace nova_s6.Utils
 
         public static string PleaseShortenThis(string thing)
         {
-            if (thing.Length < 999) return thing; // Return original if too short
+            if (thing.Length < 350) return thing; // Return original if too short
 
             string shortenText = string.Concat(thing.Substring(0, 3));
 
             // Add ellipsis based on the length
-            shortenText += new string('.', Math.Min(15, Math.Max(0, thing.Length - 7)));
+            shortenText += new string('.', Math.Min(3, Math.Max(0, thing.Length - 7)));
 
             shortenText += thing.Substring(thing.Length - 4);
 
@@ -84,21 +83,11 @@ namespace nova_s6.Utils
         {
             if (things.Count < 2) return;
 
-            Console.ForegroundColor = XmInterpreter.__CurrentForegroundColor; ;
+            Console.ForegroundColor = ConsoleColor.White;
 
-            if (things.Count >= 2)
+            for (int i = 0; i < things.Count; i++)
             {
-                for (int i = 0; i < things.Count; i++)
-                {
-                    PrintStyledThing(things[i]);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < 2; i++)
-                {
-                    PrintStyledThing(things[i]);
-                }
+                PrintStyledThing(things[i]);
             }
 
             // Reset to default color after processing
@@ -118,9 +107,17 @@ namespace nova_s6.Utils
             {
                 shell_icon = "%";
             }
+            else if (shell.ToLower() == "ush")
+            {
+                shell_icon = "&";
+            }
+            else if (shell.ToLower() == "holy-c")
+            {
+                shell_icon = "hc";
+            }
             else
             {
-                shell_icon = "?";
+                shell_icon = "??";
             }
 
             return shell_icon;
@@ -152,44 +149,23 @@ namespace nova_s6.Utils
             }
 
             Console.Write(thing);
-            Console.ForegroundColor = XmInterpreter.__CurrentForegroundColor; // Reset after printing
+            Console.ForegroundColor = ConsoleColor.White; // Reset after printing
         }
 
         public static void Banner()
         {
             Console.WriteLine($@"
-$$\   $$\                              $$$$$$$$\ 
-$$$\  $$ |                             $$  _____|
-$$$$\ $$ | $$$$$$\ $$\    $$\ $$$$$$\  $$ |      
-$$ $$\$$ |$$  __$$\\$$\  $$  |\____$$\ $$$$$\    
-$$ \$$$$ |$$ /  $$ |\$$\$$  / $$$$$$$ |$$  __|   
-$$ |\$$$ |$$ |  $$ | \$$$  / $$  __$$ |$$ |      
-$$ | \$$ |\$$$$$$  |  \$  /  \$$$$$$$ |$$ |      
-\__|  \__| \______/    \_/    \_______|\__|
+888888ba                                      .d88888b  .d8888P 
+88    `8b                                     88.    ""' 88'     
+88     88 .d8888b. dP   .dP .d8888b.          `Y88888b. 88baaa. 
+88     88 88'  `88 88   d8' 88'  `88 88888888       `8b 88` `88 
+88     88 88.  .88 88 .88'  88.  .88          d8'   .8P 8b. .d8 
+dP     dP `88888P' 8888P'   `88888P8           Y88888P  `Y888P'
 
 ╔══════════════════════════════╗ ╔═════════════════════════════════════════════════════════════════════════╗
-║ {Program.__shell__,-6} / {Program.__version__,-18}  ║ ║ Website: https://hmza-sfyn.github.io/ref/hmza/nas/index.html            ║ 
+║ {Program.__shell__,-6} / {Program.__version__,-18}  ║ ║ Website: https://blog.hmza.vercel.app/posts/nova-project/               ║ 
 ║ Author: hmZa-Sfyn            ║ ║ Github: https://github.com/hmZa-Sfyn                                    ║
-╚══════════════════════════════╝ ╚═════════════════════════════════════════════════════════════════════════╝                                                                                  
-                                   
-╔════════════════════════════════════════╗ [!] This software is provided ""as is"" without warranty of any kind, either express or implied,
-║ Legal Notice!                          ║ including but not limited to the warranties of merchantability, fitness for a particular purpose,
-║                                        ║ or non-infringement. hmZa and Novaf Corp do not warrant that the software will meet your requirements
-║ Acceptance of Terms:                   ║ or that its operation will be uninterrupted or error-free.
-║ By using this software, you agree to   ║
-║ comply with and be bound by the terms  ║ [!] You agree to indemnify, defend, and hold harmless hmZa and Novaf Corp from any claims, lo
-║ and conditions set forth in this legal ║ liabilities, damages, costs, or expenses (including reasonable attorneys' fees) arising out of or 
-║ notice. If you do not agree to these   ║ in connection with your use of this software.
-║ terms, please do not use this software.║ 
-║                                        ║ [!] This legal notice shall be governed by and construed in accordance with the laws of your government.
-║ License Grant:                         ║ Any disputes arising from this legal notice shall be subject to the exclusive jurisdiction of the courts
-║ This software is licensed to you, not  ║ located in your government.
-║ sold. You are granted a limited,       ║
-║ non-exclusive, non-transferable license║ [*] Have fun! 
-║ to use this software in accordance with║ 
-║ the terms of this legal notice.        ║ 
-╚════════════════════════════════════════╝
-
+╚══════════════════════════════╝ ╚═════════════════════════════════════════════════════════════════════════╝                                                                                                            
 ╔═══════════════════════════════════════╗
 ║ Help: type `help` for help message    ║ 
 ╚═══════════════════════════════════════╝

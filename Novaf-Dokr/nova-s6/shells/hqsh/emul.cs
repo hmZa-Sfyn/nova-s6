@@ -10,7 +10,7 @@ using System.Diagnostics;
 using System.ComponentModel.Design;
 using System.Text.RegularExpressions;
 using Novaf_Dokr.Command.env.user;
-using Novaf_Dokr.Customization;
+
 
 using System.Net.Sockets;
 using System.Net.FtpClient;
@@ -30,8 +30,62 @@ namespace nova_s6.shells.hqsh
 {
     public class emul
     {
+        private static Dictionary<string, string> macros = new Dictionary<string, string>();
+        private static string okayMacrosPath = Path.Combine(CommandEnv.UserHomeDir, "vin_env\\third_party\\nova\\hqsh\\macros\\okay_macros.json"); //Path.Combine(AppContext.BaseDirectory, "okay_macros.json");
+        private static string notOkayMacrosPath = Path.Combine(CommandEnv.UserHomeDir, "vin_env\\third_party\\nova\\hqsh\\macros\\not_okay_macros.json");  //Path.Combine(AppContext.BaseDirectory, "not_okay_macros.json");
+
+        public static void EnsureMacrosExist()
+        {
+            try
+            {
+                // Ensure the directory for macros exists
+                string macrosDirectory = Path.GetDirectoryName(okayMacrosPath);
+                if (!Directory.Exists(macrosDirectory))
+                {
+                    Directory.CreateDirectory(macrosDirectory);
+                    Console.WriteLine($"Directory created: {macrosDirectory}");
+                }
+
+                // Check and create the "okay_macros.json" file if not present
+                if (!File.Exists(okayMacrosPath))
+                {
+                    File.WriteAllText(okayMacrosPath, "{}"); // Empty JSON object
+                    Console.WriteLine($"File created: {okayMacrosPath}");
+                }
+
+                // Check and create the "not_okay_macros.json" file if not present
+                if (!File.Exists(notOkayMacrosPath))
+                {
+                    File.WriteAllText(notOkayMacrosPath, "{}"); // Empty JSON object
+                    Console.WriteLine($"File created: {notOkayMacrosPath}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error ensuring macro files exist: {ex.Message}");
+            }
+        }
+
         public static int ate(List<string> pcS)
         {
+            for (int i = 0; i < pcS.Count; i++)
+            {
+                if (macros.ContainsKey(pcS[i]))
+                {
+                    // Split the macro's value into a list and replace the current input with it
+                    var expandedMacro = macros[pcS[i]].Split(" ").ToList();
+
+                    // Remove the current macro key from pcS
+                    pcS.RemoveAt(i);
+
+                    // Insert the expanded macro at the same index
+                    pcS.InsertRange(i, expandedMacro);
+
+                    // Adjust the loop index to skip over the inserted elements
+                    i += expandedMacro.Count - 1;
+                }
+            }
+
             #region pre-processing
             if (pcS == null)
                 return 0;
@@ -63,6 +117,7 @@ namespace nova_s6.shells.hqsh
 
             pcS = parts;
             #endregion
+
 
             if (pcS[0].ToLower() == "echo")
             {
@@ -112,10 +167,10 @@ namespace nova_s6.shells.hqsh
                 }
                 else
                 {
-                    errs.CacheClean();
+                    //errs.CacheClean();
                     errs.New($"`{pcS[1]}`: is not a well-known command, valid commands are: `-add <item>` , `-get <int>` , `-list`");
-                    errs.ListThemAll();
-                    errs.CacheClean();
+                    //errs.ListThemAll();
+                    //errs.CacheClean();
                 }
             }
             else if (pcS[0].ToLower().StartsWith("reg"))
@@ -148,12 +203,14 @@ namespace nova_s6.shells.hqsh
                 }
                 else
                 {
-                    errs.CacheClean();
+                    //errs.CacheClean();
                     errs.New($"`{Params[1]}`: is not a well-known command, valid commands are: `>>set>>(item)>>(val)` , `>>get>>(item)` , `>>list`");
-                    errs.ListThemAll();
-                    errs.CacheClean();
+                    //errs.ListThemAll();
+                    //errs.CacheClean();
                 }
             }
+
+
 
             else if (pcS[0].ToLower().StartsWith("$$"))
             {
@@ -181,7 +238,7 @@ namespace nova_s6.shells.hqsh
                             {
                                 errs.New("No environment variables set.");
                                 errs.ListThem();
-                                errs.CacheClean();
+                                //errs.CacheClean();
                             }
                             else
                             {
@@ -200,10 +257,10 @@ namespace nova_s6.shells.hqsh
                             }
                             catch (Exception)
                             {
-                                errs.CacheClean();
+                                //errs.CacheClean();
                                 errs.New($"hqsh: something went wrong!");
-                                errs.ListThemAll();
-                                errs.CacheClean();
+                                //errs.ListThemAll();
+                                //errs.CacheClean();
                             }
                             return 0;
                         }
@@ -222,10 +279,10 @@ namespace nova_s6.shells.hqsh
                             }
                             catch
                             {
-                                errs.CacheClean();
+                                //errs.CacheClean();
                                 errs.New($"hqsh: something went wrong!");
-                                errs.ListThemAll();
-                                errs.CacheClean();
+                                //errs.ListThemAll();
+                                //errs.CacheClean();
 
                             }
                         }
@@ -237,17 +294,111 @@ namespace nova_s6.shells.hqsh
                     }
                     else
                     {
-                        errs.CacheClean();
+                        //errs.CacheClean();
                         errs.New($"hqsh: `{pcS[0]}`: something went wrong!");
-                        errs.ListThemAll();
-                        errs.CacheClean();
+                        //errs.ListThemAll();
+                        //errs.CacheClean();
                     }
                 }
-                else if (pcS[0].ToLower().StartsWith("$$env"))
-                {
-
-                }
             }
+            else if (pcS[0].ToLower() == "macro")
+            {
+                LoadMacros();
+                if (pcS.Count < 2)
+                {
+                    Console.WriteLine("Usage: macro [add|remove|update|list|restore] [alias] [command]");
+                    return -1;
+                }
+
+                switch (pcS[1].ToLower())
+                {
+                    case "add":
+                        if (pcS.Count < 4)
+                        {
+                            Console.WriteLine("Usage: macro add <alias> <command>");
+                            return -1;
+                        }
+                        string newCommand = string.Join(" ", pcS.Skip(3));
+                        if (!macros.ContainsKey(pcS[2].ToLower()))
+                        {
+                            macros.Add(pcS[2].ToLower(), newCommand);
+                            SaveMacros(okayMacrosPath);
+                            Console.WriteLine($"Macro '{pcS[2]}' added successfully.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Macro '{pcS[2]}' already exists. Use 'macro update' to modify it.");
+                        }
+                        break;
+
+                    case "remove":
+                        if (pcS.Count < 3)
+                        {
+                            Console.WriteLine("Usage: macro remove <alias>");
+                            return -1;
+                        }
+                        if (macros.ContainsKey(pcS[2].ToLower()))
+                        {
+                            // Save to not_okay.json before removing
+                            var removedMacros = new Dictionary<string, string>
+                {
+                    { pcS[2].ToLower(), macros[pcS[2].ToLower()] }
+                };
+                            string json = JsonSerializer.Serialize(removedMacros, new JsonSerializerOptions { WriteIndented = true });
+                            File.AppendAllText(notOkayMacrosPath, json);
+
+                            macros.Remove(pcS[2].ToLower());
+                            SaveMacros(okayMacrosPath);
+                            Console.WriteLine($"Macro '{pcS[2]}' removed successfully.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Macro '{pcS[2]}' not found.");
+                        }
+                        break;
+
+                    case "update":
+                        if (pcS.Count < 4)
+                        {
+                            Console.WriteLine("Usage: macro update <alias> <new_command>");
+                            return -1;
+                        }
+                        string updatedCommand = string.Join(" ", pcS.Skip(3));
+                        if (macros.ContainsKey(pcS[2].ToLower()))
+                        {
+                            macros[pcS[2].ToLower()] = updatedCommand;
+                            SaveMacros(okayMacrosPath);
+                            Console.WriteLine($"Macro '{pcS[2]}' updated successfully.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Macro '{pcS[2]}' not found.");
+                        }
+                        break;
+
+                    case "list":
+                        if (macros.Count == 0)
+                        {
+                            Console.WriteLine("No macros defined.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Defined macros:");
+                            foreach (var macro in macros)
+                            {
+                                Console.WriteLine($"{macro.Key} => {macro.Value}");
+                            }
+                        }
+                        break;
+
+                    default:
+                        Console.WriteLine("Unknown macro command. Available commands: add, remove, update, list");
+                        break;
+                }
+                return 1;
+            }
+
+
 
             else if (pcS[0].ToLower() == "file")
             {
@@ -1129,6 +1280,73 @@ namespace nova_s6.shells.hqsh
                 }
             }
 
+
+
+            else if (pcS[0].ToLower() == "pwd")
+            {
+                Console.WriteLine(CommandEnv.CurrentDirDest);
+            }
+            else if (pcS[0].ToLower() == "cd")
+            {
+                if (pcS.Count < 2)
+                {
+                    errs.New($"Usage: cd <directory> - Change the current working directory.");
+                    errs.ListThem();
+                    //errs.CacheClean();
+                    return -1;
+                }
+
+                string newDir = pcS[1];
+
+                try
+                {
+                    if (newDir == "..")
+                    {
+                        // Move up one directory level
+                        newDir = Path.GetDirectoryName(CommandEnv.CurrentDirDest);
+                    }
+                    else if (newDir == "~")
+                    {
+                        newDir = CommandEnv.UserHomeDir;
+                    }
+                    else if (!Path.IsPathRooted(newDir))
+                    {
+                        newDir = Path.Combine(CommandEnv.CurrentDirDest, newDir);
+                    }
+
+                    if (newDir == null)
+                    {
+                        errs.New($"Error: Cannot navigate above the root directory.");
+                        errs.ListThem();
+                        //errs.CacheClean();
+                        return -1;
+                    }
+
+                    newDir = Path.GetFullPath(newDir);
+
+                    if (Directory.Exists(newDir))
+                    {
+                        CommandEnv.CurrentDirDest = newDir;
+                        Environment.CurrentDirectory = newDir;  // Ensure the process working directory is also updated
+                                                                //Console.WriteLine($"Changed directory to: {CurrentDirDest}");
+                    }
+                    else
+                    {
+                        errs.New($"Error: Directory '{newDir}' does not exist.");
+                        errs.ListThem();
+                        //errs.CacheClean();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    errs.New($"Error: {ex.Message}");
+                    errs.ListThem();
+                    //errs.CacheClean();
+                }
+            }
+
+
+
             else if (pcS[0].ToLower() == "help")
             {
                 List<string> help_lines = [
@@ -1140,22 +1358,32 @@ namespace nova_s6.shells.hqsh
                     "  mind -get 1                    // Gets item at index 1",
                     "  mind -list                     // Shows all stored items",
                     " reg      ==> to store something in RegisterStorage[string][string].",
-                    "  reg>>set>>key>>value    // Sets a key-value pair",
-                    "  reg>>get>>key          // Gets value for a key",
-                    "  reg>>list             // Lists all registered key-value pairs",
+                    "  reg>>set>>key>>value     // Sets a key-value pair",
+                    "  reg>>get>>key            // Gets value for a key",
+                    "  reg>>list                // Lists all registered key-value pairs",
+                    " cd",
+                    "  cd directory_path  // Changes the current-dir",
+                    " exit",
+                    "  exit // Exit the application",
+                    " macro",
+                    "  macro add alias command     // To add a new macro",
+                    "  macro remove alias command  // To remove a macro",
+                    "  macro update alias command  // To update an existing macro",
+                    "  macro list                  // To list all macros",
+                    "  macro restore               // To restore the deleted macros",
                   "\n$$:",
                     " $$env::variableName           // Gets value of specific variable",
-                    " $$env>>variableName>>value   // Sets environment variable",
-                    " $$env>>$all                  // Lists all environment variables",
-                    " $$env>>$rem>>variableName   // Removes environment variable",
+                    " $$env>>variableName>>value    // Sets environment variable",
+                    " $$env>>$all                   // Lists all environment variables",
+                    " $$env>>$rem>>variableName     // Removes environment variable",
                   "\nUtils:",
                     " File:",
-                    "  file create filename content    // Creates new file with content",
-                    "  file read filename             // Displays file content",
-                    "  file delete filename           // Deletes specified file",
-                    "  file append filename content   // Appends content to file",
-                    "  file rename oldname newname    // Renames file",
-                    "  file copy source destination   // Copies file",
+                    "  file create filename content  // Creates new file with content",
+                    "  file read filename            // Displays file content",
+                    "  file delete filename          // Deletes specified file",
+                    "  file append filename content  // Appends content to file",
+                    "  file rename oldname newname   // Renames file",
+                    "  file copy source destination  // Copies file",
                     "  file info filename            // Shows file information",
                     "  file exists filename          // Checks if file exists",
                     "  file lines-count filename     // Counts lines in file",
@@ -1164,23 +1392,23 @@ namespace nova_s6.shells.hqsh
                     "  file decrypt filename         // Decrypts file",
                     "  file compress filename        // Compresses file",
                     "  file decompress filename      // Decompresses file",
-                    "  file hash filename           // Generates SHA-256 hash",
-                    "  file watch filename          // Monitors file for changes",
-                    "  file temp [content]          // Creates temporary file",
+                    "  file hash filename            // Generates SHA-256 hash",
+                    "  file watch filename           // Monitors file for changes",
+                    "  file temp [content]           // Creates temporary file",
                     " Directory:",
                     "  dir create dirname            // Creates new directory",
-                    "  dir list dirname             // Lists directory contents",
-                    "  dir delete dirname           // Deletes directory",
-                    "  dir rename oldname newname   // Renames directory",
-                    "  dir exists dirname           // Checks if directory exists",
-                    "  dir info dirname            // Shows directory information",
-                    "  dir size dirname            // Calculates directory size",
-                    "  dir count-files dirname     // Counts files in directory",
-                    "  dir count-dirs dirname      // Counts subdirectories",
-                    "  dir backup dirname          // Creates directory backup",
-                    "  dir clean dirname           // Removes all contents",
-                    "  dir find dirname pattern    // Finds files matching pattern",
-                    "  dir monitor dirname         // Monitors directory changes",
+                    "  dir list dirname              // Lists directory contents",
+                    "  dir delete dirname            // Deletes directory",
+                    "  dir rename oldname newname    // Renames directory",
+                    "  dir exists dirname            // Checks if directory exists",
+                    "  dir info dirname              // Shows directory information",
+                    "  dir size dirname              // Calculates directory size",
+                    "  dir count-files dirname       // Counts files in directory",
+                    "  dir count-dirs dirname        // Counts subdirectories",
+                    "  dir backup dirname            // Creates directory backup",
+                    "  dir clean dirname             // Removes all contents",
+                    "  dir find dirname pattern      // Finds files matching pattern",
+                    "  dir monitor dirname           // Monitors directory changes",
                     " Network:",
                     "  net tcp-connect hostname port [message]      // Establishes TCP connection to a host and port",
                     "  net tcp-server port                          // Creates a TCP server on the specified port",
@@ -1209,13 +1437,16 @@ namespace nova_s6.shells.hqsh
                     Console.WriteLine(line);
                 }
             }
-
+            else if (pcS[0].ToLower() == "exit")
+            {
+                Environment.Exit(0);
+            }
             else
             {
-                errs.CacheClean();
+                //errs.CacheClean();
                 errs.New($"hqsh: `{pcS[0]}`: something went wrong!, type `help` for help!");
-                errs.ListThemAll();
-                errs.CacheClean();
+                //errs.ListThemAll();
+                //errs.CacheClean();
                 return 0;
             }
 
@@ -1224,6 +1455,43 @@ namespace nova_s6.shells.hqsh
             return 1;
         }
 
+
+        // Add these macro-related functions
+        private static void LoadMacros()
+        {
+            try
+            {
+                if (File.Exists(okayMacrosPath))
+                {
+                    string json = File.ReadAllText(okayMacrosPath);
+                    macros = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading macros: {ex.Message}");
+                macros = new Dictionary<string, string>();
+            }
+        }
+
+        private static void SaveMacros(string path)
+        {
+            try
+            {
+                string json = JsonSerializer.Serialize(macros, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(path, json);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving macros: {ex.Message}");
+            }
+        }
+
+
+        /// <summary>
+        ///  DATA ENCRYPTION AND DECRYPTION
+        /// </summary>
+        /// <returns></returns>
 
         private static byte[] GenerateRandomKey()
         {

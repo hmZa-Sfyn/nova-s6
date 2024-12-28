@@ -10,7 +10,7 @@ using System.Diagnostics;
 using System.ComponentModel.Design;
 using System.Text.RegularExpressions;
 using Novaf_Dokr.Command.env.user;
-using Novaf_Dokr.Customization;
+
 
 namespace nova_s6.Command
 {
@@ -76,14 +76,14 @@ namespace nova_s6.Command
                     File.WriteAllText(EnvPointersFile, "{}");
                 }
 
-                errs.ListThem();
-                errs.CacheClean();
+                //errs.ListThem();
+                //errs.CacheClean();
             }
             catch (Exception ex)
             {
                 errs.New($"Error creating environment setup: {ex.Message}");
-                errs.ListThem();
-                errs.CacheClean();
+                //errs.ListThem();
+                //errs.CacheClean();
             }
         }
         public static void SaveEnvironmentVariables()
@@ -103,8 +103,8 @@ namespace nova_s6.Command
             catch (Exception ex)
             {
                 errs.New($"Error loading environment variables: {ex.Message}");
-                errs.ListThem();
-                errs.CacheClean();
+                //errs.ListThem();
+                //errs.CacheClean();
             }
         }
         public static void SaveEnvironmentPointers()
@@ -124,8 +124,8 @@ namespace nova_s6.Command
             catch (Exception ex)
             {
                 errs.New($"Error loading environment pointers: {ex.Message}");
-                errs.ListThem();
-                errs.CacheClean();
+                //errs.ListThem();
+                //errs.CacheClean();
             }
         }
         public static void SaveAliases()
@@ -145,8 +145,8 @@ namespace nova_s6.Command
             catch (Exception ex)
             {
                 errs.New($"Error loading aliases: {ex.Message}");
-                errs.ListThem();
-                errs.CacheClean();
+                //errs.ListThem();
+                //errs.CacheClean();
             }
         }
         public static List<List<string>> DecoCommands(List<string> commands)
@@ -209,15 +209,24 @@ namespace nova_s6.Command
                 if (parts.Length == 1 && parts[0] == "@bin")
                 {
                     errs.New($"Usage: @bin <command> - Display file contents in binary format");
-                    errs.ListThem();
-                    errs.CacheClean();
+                    //errs.ListThem();
+                    //errs.CacheClean();
                     return;
                 }
 
                 string executable = parts.Length > 1 ? parts[1] : parts[0];
                 string[] args = parts.Skip(2).ToArray();
 
-                string filePath = $"C:\\Users\\{Environment.UserName}\\vin_env\\bin\\{executable}\\{executable}.exe";
+                string filePath = "";
+
+                if (executable.StartsWith("./") || executable.StartsWith(".\\"))
+                    if (executable.EndsWith(".exe"))
+                        filePath = $"{Environment.CurrentDirectory}\\{executable}";
+                    else
+                        filePath = $"{Environment.CurrentDirectory}\\{executable}.exe";
+                else
+                    filePath = $"C:\\Users\\{Environment.UserName}\\vin_env\\bin\\{executable}\\{executable}.exe";
+
                 try
                 {
                     using (Process process = Process.Start(filePath, string.Join(" ", args)))
@@ -227,9 +236,9 @@ namespace nova_s6.Command
                 }
                 catch (Exception ex)
                 {
-                    errs.New($"Error starting process: {ex.Message}");
-                    errs.ListThem();
-                    errs.CacheClean();
+                    errs.New($"e-s-p: Something wrong with `{filePath}`.");
+                    //errs.ListThem();
+                    //errs.CacheClean();
                 }
             }
             else
@@ -237,7 +246,16 @@ namespace nova_s6.Command
                 string executable = parts.Length > 1 ? parts[0] : parts[0];
                 string[] args = parts.Skip(1).ToArray();
 
-                string filePath = $"C:\\Users\\{Environment.UserName}\\vin_env\\bin\\{executable}\\{executable}.exe";
+                string filePath = "";
+
+                if (executable.StartsWith("./") || executable.StartsWith(".\\"))
+                    if (executable.EndsWith(".exe"))
+                        filePath = $"{Environment.CurrentDirectory}\\{executable}";
+                    else
+                        filePath = $"{Environment.CurrentDirectory}\\{executable}.exe";
+                else
+                    filePath = $"C:\\Users\\{Environment.UserName}\\vin_env\\bin\\{executable}\\{executable}.exe";
+
                 try
                 {
                     using (Process process = Process.Start(filePath, string.Join(" ", args)))
@@ -247,9 +265,9 @@ namespace nova_s6.Command
                 }
                 catch (Exception ex)
                 {
-                    errs.New($"Error starting process: {ex.Message}");
-                    errs.ListThem();
-                    errs.CacheClean();
+                    errs.New($"e-s-p: Something wrong with `{filePath}`.");
+                    //errs.ListThem();
+                    //errs.CacheClean();
                 }
             }
         }
@@ -275,8 +293,8 @@ namespace nova_s6.Command
                 //    errs.New($"{x}: Expected: `python:abc.py` found: `{item}`");
                 //    x = x + 1;
                 //}
-                errs.ListThem();
-                errs.CacheClean();
+                //errs.ListThem();
+                //errs.CacheClean();
                 return;
             }
 
@@ -294,8 +312,8 @@ namespace nova_s6.Command
                     //    errs.New($"{x}: Expected: `python:abc.py` found: `{item}`");
                     //    x = x + 1;
                     //}
-                    errs.ListThem();
-                    errs.CacheClean();
+                    //errs.ListThem();
+                    //errs.CacheClean();
                     return;
                 }
 
@@ -313,8 +331,8 @@ namespace nova_s6.Command
                 if (!File.Exists(filePath))
                 {
                     errs.New($"Error: File '{fileName}' not found in {filePath}");
-                    errs.ListThem();
-                    errs.CacheClean();
+                    //errs.ListThem();
+                    //errs.CacheClean();
                     return;
                 }
 
@@ -360,8 +378,8 @@ namespace nova_s6.Command
                         if (!string.IsNullOrEmpty(error))
                         {
                             errs.New($"Error: {error}");
-                            errs.ListThem();
-                            errs.CacheClean();
+                            //errs.ListThem();
+                            //errs.CacheClean();
                         }
                     }
                 }
@@ -374,8 +392,8 @@ namespace nova_s6.Command
             {
                 // Handle general errors during process execution
                 errs.New($"Error starting process: {ex.Message}");
-                errs.ListThem();
-                errs.CacheClean();
+                //errs.ListThem();
+                //errs.CacheClean();
             }
         }
         public static string GetExtension(string executable)
@@ -473,8 +491,8 @@ namespace nova_s6.Command
                     //                    {
                     //                        //errs.New(exept.ToString());
                     //                        errs.New($"The given key '{parts[i]}' was not present in the env dictionary.");
-                    //                        errs.ListThem();
-                    //                        errs.CacheClean();
+                    //                        //errs.ListThem();
+                    //                        //errs.CacheClean();
                     //                        return;
                     //                    }
                     //                }
@@ -499,8 +517,8 @@ namespace nova_s6.Command
                     //                    {
                     //                        //errs.New(exept.ToString());
                     //                        errs.New($"The given key '{parts[i]}' was not present in the env dictionary.");
-                    //                        errs.ListThem();
-                    //                        errs.CacheClean();
+                    //                        //errs.ListThem();
+                    //                        //errs.CacheClean();
                     //                        return;
                     //                    }
                     //                }
@@ -523,8 +541,8 @@ namespace nova_s6.Command
                     //                {
                     //                    //errs.New(exept.ToString());
                     //                    errs.New($"The given key '{parts[i]}' was not present in the env dictionary.");
-                    //                    errs.ListThem();
-                    //                    errs.CacheClean();
+                    //                    //errs.ListThem();
+                    //                    //errs.CacheClean();
                     //                    return;
                     //                }
 
@@ -536,9 +554,9 @@ namespace nova_s6.Command
                     //        }
                     //        else
                     //        {
-                    //            errs.CacheClean();
+                    //            //errs.CacheClean();
                     //            errs.New($"`{tCmd}` is not a real command in `{parts[i]}`");
-                    //            errs.ListThem();
+                    //            //errs.ListThem();
                     //            return;
                     //        }
                     //    }
@@ -562,8 +580,8 @@ namespace nova_s6.Command
                     //        {
                     //            //errs.New(exept.ToString());
                     //            errs.New($"The given key '{parts[i]}' was not present in the env dictionary.");
-                    //            errs.ListThem();
-                    //            errs.CacheClean();
+                    //            //errs.ListThem();
+                    //            //errs.CacheClean();
                     //            return;
                     //        }
                     //    }
@@ -582,8 +600,8 @@ namespace nova_s6.Command
                     //        {
                     //            //errs.New(exept.ToString());
                     //            errs.New($"The given key '{parts[i]}' was not present in the env dictionary.");
-                    //            errs.ListThem();
-                    //            errs.CacheClean();
+                    //            //errs.ListThem();
+                    //            //errs.CacheClean();
                     //            return;
                     //        }
                     //    }
@@ -612,8 +630,8 @@ namespace nova_s6.Command
                     //        {
                     //            // Handle the case where the variable is not found
                     //            errs.New($"The given key '{vname}' was not present in the env dictionary.");
-                    //            errs.ListThem();
-                    //            errs.CacheClean();
+                    //            //errs.ListThem();
+                    //            //errs.CacheClean();
                     //            return;
                     //        }
                     //    }
@@ -647,22 +665,21 @@ namespace nova_s6.Command
                     case "@help":
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.WriteLine("""
-                            @user      ::  Manage users and logins
-                            @fnet      ::  Manage nova network and fnet sessions
-                            @sres      ::  Manage some of the developer based system resources
-                            @help      ::  Get this help message
-                            @run       ::  To run a command script
-                            @cls       ::  Clear the console
-                            @exit      ::  Exit the application
-                            @evars     ::  Manage environment variables ('set', 'get', 'list', 'unset')
-                            @alias     ::  Manage command aliases ('add', 'remove', 'list')
-                            @history   ::  View or clear command history
-                            @encrypt   ::  Encrypt a file or directory
-                            @decrypt   ::  Decrypt a file or directory
-                            @bin       ::  Display file contents in binary format
-                            @ibin      ::  To run interpreter programs or scripts, use `--no-shell` to run the script in the shell, it may break your shell, so dont do it
-                            @cd        ::  Change the current directory
-                            @sslib     ::  Standard Shell Lib, type `@sslib #help` for help. (this is not for the user, its for the x-compiler and other stuff)
+                            @user      // Manage users and logins
+                            @fnet      // Manage nova network and fnet sessions
+                            @help      // Get this help message
+                            @run       // To run a command script
+                            @cls       // Clear the console
+                            @exit      // Exit the application
+                            @evars     // Manage environment variables ('set', 'get', 'list', 'unset')
+                            @alias     // Manage command aliases ('add', 'remove', 'list')
+                            @history   // View or clear command history
+                            @encrypt   // Encrypt a file or directory
+                            @decrypt   // Decrypt a file or directory
+                            @bin       // Display file contents in binary format
+                            @ibin      // To run interpreter programs or scripts, use `--no-shell` to run the script in the shell, it may break your shell, so dont do it
+                            @cd        // Change the current directory
+                            @sslib     // Standard Shell Lib, type `@sslib #help` for help. (this is not for the user, its for the x-compiler and other stuff)
                             """);
                         Console.ResetColor();
                         break;
@@ -671,10 +688,10 @@ namespace nova_s6.Command
                         ProcessStdCommand(parts);
                         break;
 
-                    case "@sres":
-                    case "@sys":
-                        system_command.ProcessSystemCommand(parts);
-                        break;
+                    //case "@sres":
+                    //case "@sys":
+                    //    system_command.ProcessSystemCommand(parts);
+                    //    break;
 
                     case "@user":                           ////// NEW COMMAND //////
                         Users.entrypoint(parts);
@@ -697,10 +714,10 @@ namespace nova_s6.Command
                         {
                             if (!File.Exists(parts[1]))
                             {
-                                errs.CacheClean();
+                                //errs.CacheClean();
                                 errs.New($"Error: `{parts[1]}` file not present.");
-                                errs.ListThem();
-                                errs.CacheClean();
+                                //errs.ListThem();
+                                //errs.CacheClean();
                             }
                             else
                             {
@@ -722,10 +739,10 @@ namespace nova_s6.Command
                         }
                         else
                         {
-                            errs.CacheClean();
+                            //errs.CacheClean();
                             errs.New($"Error: Usage: `@run $filepath.sh`");
-                            errs.ListThem();
-                            errs.CacheClean();
+                            //errs.ListThem();
+                            //errs.CacheClean();
                         }
                         break;
 
@@ -766,8 +783,8 @@ namespace nova_s6.Command
                     default:
                         ProcessBinCommand(parts);
                         //errs.New($"Command: `{command}` is not a valid internal command, type `@help` for help!");
-                        //errs.ListThem();
-                        //errs.CacheClean();
+                        ////errs.ListThem();
+                        ////errs.CacheClean();
                         break;
                 }
             }
@@ -777,8 +794,8 @@ namespace nova_s6.Command
             if (parts.Length < 2)
             {
                 errs.New($"Usage: @cd <directory> - Change the current working directory.");
-                errs.ListThem();
-                errs.CacheClean();
+                //errs.ListThem();
+                //errs.CacheClean();
                 return;
             }
 
@@ -803,8 +820,8 @@ namespace nova_s6.Command
                 if (newDir == null)
                 {
                     errs.New($"Error: Cannot navigate above the root directory.");
-                    errs.ListThem();
-                    errs.CacheClean();
+                    //errs.ListThem();
+                    //errs.CacheClean();
                     return;
                 }
 
@@ -819,15 +836,15 @@ namespace nova_s6.Command
                 else
                 {
                     errs.New($"Error: Directory '{newDir}' does not exist.");
-                    errs.ListThem();
-                    errs.CacheClean();
+                    //errs.ListThem();
+                    //errs.CacheClean();
                 }
             }
             catch (Exception ex)
             {
                 errs.New($"Error: {ex.Message}");
-                errs.ListThem();
-                errs.CacheClean();
+                //errs.ListThem();
+                //errs.CacheClean();
             }
         }
         public static void ProcessStdCommand(string[] parts)
@@ -939,16 +956,16 @@ namespace nova_s6.Command
                     else
                     {
                         errs.New($"Environment variable '{parts[2]}' not found.");
-                        errs.ListThem();
-                        errs.CacheClean();
+                        //errs.ListThem();
+                        //errs.CacheClean();
                     }
                     break;
                 case "list":
                     if (EnvironmentVariables.Count == 0)
                     {
                         errs.New("No environment variables set.");
-                        errs.ListThem();
-                        errs.CacheClean();
+                        //errs.ListThem();
+                        //errs.CacheClean();
                     }
                     else
                     {
@@ -969,15 +986,15 @@ namespace nova_s6.Command
                         else
                         {
                             errs.New($"Environment variable '{parts[2]}' not found.");
-                            errs.ListThem();
-                            errs.CacheClean();
+                            //errs.ListThem();
+                            //errs.CacheClean();
                         }
                     }
                     break;
                 default:
                     errs.New("Invalid @evars command. Use 'set', 'get', 'list', or 'unset'.");
-                    errs.ListThem();
-                    errs.CacheClean();
+                    //errs.ListThem();
+                    //errs.CacheClean();
                     break;
             }
         }
@@ -997,8 +1014,8 @@ namespace nova_s6.Command
                     else
                     {
                         errs.New("Invalid alias command. Use '@alias add [name] [command]'.");
-                        errs.ListThem();
-                        errs.CacheClean();
+                        //errs.ListThem();
+                        //errs.CacheClean();
                     }
                     break;
                 case "remove":
@@ -1012,8 +1029,8 @@ namespace nova_s6.Command
                         else
                         {
                             errs.New($"Alias '{parts[2]}' not found.");
-                            errs.ListThem();
-                            errs.CacheClean();
+                            //errs.ListThem();
+                            //errs.CacheClean();
                         }
                     }
                     else
@@ -1023,8 +1040,8 @@ namespace nova_s6.Command
                     if (Aliases.Count == 0)
                     {
                         errs.New("No aliases defined.");
-                        errs.ListThem();
-                        errs.CacheClean();
+                        //errs.ListThem();
+                        //errs.CacheClean();
                     }
                     else
                     {
@@ -1036,8 +1053,8 @@ namespace nova_s6.Command
                     break;
                 default:
                     errs.New("Invalid @alias command. Use 'add', 'remove', or 'list'.");
-                    errs.ListThem();
-                    errs.CacheClean();
+                    //errs.ListThem();
+                    //errs.CacheClean();
                     break;
             }
         }
@@ -1053,8 +1070,8 @@ namespace nova_s6.Command
                 if (CommandHistory.Count == 0)
                 {
                     errs.New("Command history is empty.");
-                    errs.ListThem();
-                    errs.CacheClean();
+                    //errs.ListThem();
+                    //errs.CacheClean();
                 }
                 else
                     for (int i = 0; i < CommandHistory.Count; i++)
@@ -1066,8 +1083,8 @@ namespace nova_s6.Command
             if (parts.Length < 2)
             {
                 errs.New($"Usage: {parts[0]} [file_or_directory]");
-                errs.ListThem();
-                errs.CacheClean();
+                //errs.ListThem();
+                //errs.CacheClean();
                 return;
             }
 
@@ -1085,8 +1102,8 @@ namespace nova_s6.Command
             else
             {
                 errs.New($"File or directory not found: {path}");
-                errs.ListThem();
-                errs.CacheClean();
+                //errs.ListThem();
+                //errs.CacheClean();
             }
         }
         public static void CommandEnvFileEncryption(string filePath, bool isEncrypt)
@@ -1125,8 +1142,8 @@ namespace nova_s6.Command
             catch (Exception ex)
             {
                 errs.New($"Error during {(isEncrypt ? "encryption" : "decryption")}: {ex.Message}");
-                errs.ListThem();
-                errs.CacheClean();
+                //errs.ListThem();
+                //errs.CacheClean();
             }
         }
         public static void CommandEnvDirectoryEncryption(string dirPath, bool isEncrypt)
@@ -1142,8 +1159,8 @@ namespace nova_s6.Command
             catch (Exception ex)
             {
                 errs.New($"Error during directory {(isEncrypt ? "encryption" : "decryption")}: {ex.Message}");
-                errs.ListThem();
-                errs.CacheClean();
+                //errs.ListThem();
+                //errs.CacheClean();
             }
         }
     }

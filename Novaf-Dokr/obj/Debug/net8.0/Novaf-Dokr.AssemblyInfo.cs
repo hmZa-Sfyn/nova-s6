@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Novaf-Dokr")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7fdd590b6d84cb9e797445b4f32047b88c1e6358")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2a94129268696c96f2678710c6f17f885f393703")]
 [assembly: System.Reflection.AssemblyProductAttribute("Novaf-Dokr")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Novaf-Dokr")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

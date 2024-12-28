@@ -1,6 +1,6 @@
 ﻿using nova_s6.Command;
 using nova_s6.Utils;
-using Novaf_Dokr.Customization.lang.xMake;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -221,15 +221,15 @@ namespace nova_vm.Command.env.sudev
             {
                 if (!IsLoggedInPermentently)
                 {
-                    Console.ForegroundColor = XmInterpreter.__CurrentBackgroundColor;
+                    Console.ForegroundColor = ConsoleColor.Black;
 
                     Console.Write("Enter password for sudev:");
 
-                    Console.ForegroundColor = XmInterpreter.__CurrentBackgroundColor;
-                    Console.BackgroundColor = XmInterpreter.__CurrentBackgroundColor;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.BackgroundColor = ConsoleColor.Black;
                     string passwd = Console.ReadLine();
 
-                    Console.ForegroundColor = XmInterpreter.__CurrentForegroundColor; ;
+                    Console.ForegroundColor = ConsoleColor.White; ;
 
                     return passwd;
                 }

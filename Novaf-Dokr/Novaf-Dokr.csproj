@@ -9,15 +9,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Customization\**" />
+    <EmbeddedResource Remove="Customization\**" />
+    <None Remove="Customization\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="nova-s6\shells\holy_c\shell.cs~RF1141ae45.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MimeKit" Version="4.9.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RestSharp" Version="112.1.0" />
     <PackageReference Include="System.Net.FtpClient" Version="1.0.5824.34026" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Customization\plugins\" />
-    <Folder Include="Customization\themes\" />
   </ItemGroup>
 
 </Project>
