@@ -22,7 +22,7 @@ namespace novaf
     public class Program
     {
         public static string __version__ = "4.3.za.24";
-        public static string __shell__ = "holy-c";
+        public static string __shell__ = "hqsh";
         static void Main(string[] args)
         {
             //Console.WriteLine("(c) nova Initial Developers | Fri3nds .G");
